@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dodecahedron</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #222; }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            z-index: 100; /* Ensure info is above the canvas */
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        Left-Click + Drag: Rotate | Scroll Wheel: Zoom | Right-Click + Drag: Pan
+    </div>
+    <div id="container"></div>
+
+    <!-- Import Three.js and OrbitControls -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        let scene, camera, renderer, dodecahedron, controls;
+
+        function init() {
+            // 1. Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x222222); // Dark grey background
+
+            // 2. Camera
+            camera = new THREE.PerspectiveCamera(
+                75, // Field of view
+                window.innerWidth / window.innerHeight, // Aspect ratio
+                0.1, // Near clipping plane
+                1000 // Far clipping plane
+            );
+            camera.position.z = 5; // Move camera back a bit
+
+            // 3. Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true }); // antialias for smoother edges
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            // 4. Geometry (The Dodecahedron)
+            const geometry = new THREE.DodecahedronGeometry(1.5); // Size of the dodecahedron
+
+            // 5. Material (How it looks)
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x8e44ad, // A nice purple color
+                metalness: 0.3,   // Slightly metallic
+                roughness: 0.6,   // Not too shiny
+                flatShading: false // Smooth shading
+            });
+            // Optional: Wireframe view
+            // const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
+
+            // 6. Mesh (Combine Geometry and Material)
+            dodecahedron = new THREE.Mesh(geometry, material);
+            scene.add(dodecahedron);
+
+            // 7. Lights
+            // Ambient light: Illuminates all objects equally
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // soft white light
+            scene.add(ambientLight);
+
+            // Directional light: Shines from a specific direction (like the sun)
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            directionalLight.position.set(5, 5, 5).normalize(); // Position the light
+            scene.add(directionalLight);
+
+            // Add another light from a different angle for better coverage
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight2.position.set(-5, -5, -5).normalize();
+            scene.add(directionalLight2);
+
+
+            // 8. Controls (OrbitControls)
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // Optional: Adds inertia to rotation
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false; // Keep panning relative to the origin
+            controls.minDistance = 2; // Don't zoom in too close
+            controls.maxDistance = 20; // Don't zoom out too far
+
+            // 9. Handle Window Resize
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate); // Loop the animation
+
+            // Required if controls.enableDamping is true
+            controls.update();
+
+            // Optional: Add a slow continuous rotation if desired
+            // dodecahedron.rotation.x += 0.001;
+            // dodecahedron.rotation.y += 0.001;
+
+            renderer.render(scene, camera); // Render the scene
+        }
+
+        // --- Start everything ---
+        init();
+        animate();
+
+    </script>
+</body>
+</html>
