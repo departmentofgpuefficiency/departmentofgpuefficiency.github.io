@@ -3,131 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Dodecahedron</title>
+    <title>Portfolio</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #222; }
-        canvas { display: block; }
-        #info {
-            position: absolute;
-            top: 10px;
-            width: 100%;
-            text-align: center;
-            color: white;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            z-index: 100; /* Ensure info is above the canvas */
+        /* CSS STYLES - The Design Engine */
+        :root {
+            --bg-color: #0d0d0d;
+            --text-color: #e0e0e0;
+            --accent-color: #FF4400; /* A sharp orange for hover states */
+            --spacing: 2rem;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace; /* The "Coder" look */
+            margin: 0;
+            padding: var(--spacing);
+            line-height: 1.4;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem); /* Responsive text size */
+            font-weight: normal;
+            margin-bottom: var(--spacing);
+            border-bottom: 1px solid var(--text-color);
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 3rem;
+            opacity: 0.6;
+        }
+
+        p {
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        /* The Link List - Not your standard navigation */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            border-bottom: 1px solid #333;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 1.2rem;
+        }
+
+        /* Hover Effect - This makes it feel alive */
+        a:hover {
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        /* Footer / Contact Area */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--text-color);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            :root { --spacing: 1rem; }
+            li { flex-direction: column; align-items: flex-start; gap: 0.5rem;}
+            .year { opacity: 0.5; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
-    <div id="info">
-        Left-Click + Drag: Rotate | Scroll Wheel: Zoom | Right-Click + Drag: Pan
-    </div>
-    <div id="container"></div>
 
-    <!-- Import Three.js and OrbitControls -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+    <!-- MAIN CONTENT START -->
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    <!-- 1. The Introduction -->
+    <header>
+        <h1>HELLO. I'M [YOUR NAME].<br>
+        I BUILD THINGS ON THE INTERNET.</h1>
+        
+        <p>
+            I am a [Job Title] based in [City]. 
+            I focus on simplicity and structure. 
+            This site is currently a work in progress.
+        </p>
+    </header>
 
-        let scene, camera, renderer, dodecahedron, controls;
+    <!-- 2. The Project List -->
+    <section>
+        <h2>Selected Work</h2>
+        <ul>
+            <li>
+                <a href="#">Project One Name</a>
+                <span class="year">2024</span>
+            </li>
+            <li>
+                <a href="#">Project Two Name</a>
+                <span class="year">2023</span>
+            </li>
+            <li>
+                <a href="#">A Case Study</a>
+                <span class="year">2023</span>
+            </li>
+            <li>
+                <a href="https://github.com/yourusername">My GitHub Profile</a>
+                <span class="year">Link</span>
+            </li>
+        </ul>
+    </section>
 
-        function init() {
-            // 1. Scene
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x222222); // Dark grey background
+    <!-- 3. The Footer / Contact -->
+    <footer class="footer">
+        <p>Don't be a stranger.</p>
+        <a href="mailto:your@email.com" style="font-size: 1.5rem;">your@email.com</a>
+    </footer>
 
-            // 2. Camera
-            camera = new THREE.PerspectiveCamera(
-                75, // Field of view
-                window.innerWidth / window.innerHeight, // Aspect ratio
-                0.1, // Near clipping plane
-                1000 // Far clipping plane
-            );
-            camera.position.z = 5; // Move camera back a bit
-
-            // 3. Renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true }); // antialias for smoother edges
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('container').appendChild(renderer.domElement);
-
-            // 4. Geometry (The Dodecahedron)
-            const geometry = new THREE.DodecahedronGeometry(1.5); // Size of the dodecahedron
-
-            // 5. Material (How it looks)
-            const material = new THREE.MeshStandardMaterial({
-                color: 0x8e44ad, // A nice purple color
-                metalness: 0.3,   // Slightly metallic
-                roughness: 0.6,   // Not too shiny
-                flatShading: false // Smooth shading
-            });
-            // Optional: Wireframe view
-            // const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
-
-            // 6. Mesh (Combine Geometry and Material)
-            dodecahedron = new THREE.Mesh(geometry, material);
-            scene.add(dodecahedron);
-
-            // 7. Lights
-            // Ambient light: Illuminates all objects equally
-            const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // soft white light
-            scene.add(ambientLight);
-
-            // Directional light: Shines from a specific direction (like the sun)
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-            directionalLight.position.set(5, 5, 5).normalize(); // Position the light
-            scene.add(directionalLight);
-
-            // Add another light from a different angle for better coverage
-            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight2.position.set(-5, -5, -5).normalize();
-            scene.add(directionalLight2);
-
-
-            // 8. Controls (OrbitControls)
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true; // Optional: Adds inertia to rotation
-            controls.dampingFactor = 0.05;
-            controls.screenSpacePanning = false; // Keep panning relative to the origin
-            controls.minDistance = 2; // Don't zoom in too close
-            controls.maxDistance = 20; // Don't zoom out too far
-
-            // 9. Handle Window Resize
-            window.addEventListener('resize', onWindowResize, false);
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate); // Loop the animation
-
-            // Required if controls.enableDamping is true
-            controls.update();
-
-            // Optional: Add a slow continuous rotation if desired
-            // dodecahedron.rotation.x += 0.001;
-            // dodecahedron.rotation.y += 0.001;
-
-            renderer.render(scene, camera); // Render the scene
-        }
-
-        // --- Start everything ---
-        init();
-        animate();
-
-    </script>
 </body>
 </html>
