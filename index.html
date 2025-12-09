@@ -3,136 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>Game Portfolio</title>
+    
+    <!-- IMPORT THE PIXEL FONT FROM GOOGLE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
     <style>
-        /* CSS STYLES - The Design Engine */
+        /* CSS STYLES */
         :root {
-            --bg-color: #0d0d0d;
-            --text-color: #e0e0e0;
-            --accent-color: #FF4400; /* A sharp orange for hover states */
+            --bg-color: #1a1a1a;       /* Dark Grey Background */
+            --text-color: #c0c0c0;     /* Light Grey Text */
+            --accent-color: #4aff4d;   /* Retro Terminal Green */
             --spacing: 2rem;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace; /* The "Coder" look */
+            /* This line applies the pixel font */
+            font-family: 'VT323', monospace; 
+            font-size: 1.4rem; /* Pixel fonts need to be bigger to be readable */
             margin: 0;
             padding: var(--spacing);
-            line-height: 1.4;
-            max-width: 900px;
+            line-height: 1.2;
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
 
         /* Typography */
         h1 {
-            font-size: clamp(2rem, 5vw, 4rem); /* Responsive text size */
-            font-weight: normal;
+            font-size: 3rem; 
+            color: var(--accent-color);
+            text-transform: uppercase;
             margin-bottom: var(--spacing);
-            border-bottom: 1px solid var(--text-color);
-            padding-bottom: 1rem;
+            text-shadow: 2px 2px 0px #000; /* Drop shadow for game feel */
         }
 
         h2 {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            font-size: 2rem;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
             margin-top: 3rem;
-            opacity: 0.6;
         }
 
         p {
-            font-size: 1.1rem;
             max-width: 600px;
+            margin-bottom: 1.5rem;
         }
 
-        /* The Link List - Not your standard navigation */
+        /* Links */
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color); /* Invert colors on hover */
+            cursor: pointer;
+        }
+
+        /* THE GAME EMBED SECTION */
+        .game-wrapper {
+            margin-top: 2rem;
+            border: 2px solid var(--accent-color);
+            padding: 1rem;
+            background: #000;
+            text-align: center;
+        }
+        
+        /* This forces the itch.io iframe to fit your screen */
+        .game-wrapper iframe {
+            max-width: 100%; 
+        }
+
+        /* List Styles */
         ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+            list-style: square; /* Square bullets match pixel art */
+            padding-left: 2rem;
         }
 
         li {
-            border-bottom: 1px solid #333;
-            padding: 1rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.2s;
-            font-size: 1.2rem;
-        }
-
-        /* Hover Effect - This makes it feel alive */
-        a:hover {
-            color: var(--accent-color);
-            font-style: italic;
-        }
-
-        /* Footer / Contact Area */
-        .footer {
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--text-color);
+            margin-bottom: 0.5rem;
         }
 
         /* Mobile Adjustments */
         @media (max-width: 600px) {
             :root { --spacing: 1rem; }
-            li { flex-direction: column; align-items: flex-start; gap: 0.5rem;}
-            .year { opacity: 0.5; font-size: 0.8rem; }
+            h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- MAIN CONTENT START -->
-
-    <!-- 1. The Introduction -->
     <header>
-        <h1>HELLO. I'M [YOUR NAME].<br>
-        I BUILD THINGS ON THE INTERNET.</h1>
+        <h1>PLAYER ONE: [YOUR NAME]</h1>
         
         <p>
-            I am a [Job Title] based in [City]. 
-            I focus on simplicity and structure. 
-            This site is currently a work in progress.
+            > Insert coin to start...<br>
+            > I build pixel art games and interactive web experiences.
         </p>
     </header>
 
-    <!-- 2. The Project List -->
+    <!-- SECTION: PLAY MY GAME -->
     <section>
-        <h2>Selected Work</h2>
+        <h2>Currently Playing</h2>
+        <p>You can play my latest build right here in the browser:</p>
+        
+        <div class="game-wrapper">
+            <!-- 
+               INSTRUCTIONS:
+               1. Go to your game page on Itch.io
+               2. Click "Edit Game" -> "Distribute" -> "Embed Game"
+               3. Copy the "iframe" code they give you.
+               4. DELETE the line below and PASTE your itch code there.
+            -->
+            <iframe frameborder="0" src="https://itch.io/embed-upload/14625602?color=333333" allowfullscreen="" width="640" height="380"><a href="https://stefan8102.itch.io/test3">Play test3 on itch.io</a></iframe>
+        </div>
+    </section>
+
+    <!-- SECTION: OTHER LINKS -->
+    <section>
+        <h2>Quest Log</h2>
         <ul>
-            <li>
-                <a href="#">Project One Name</a>
-                <span class="year">2024</span>
-            </li>
-            <li>
-                <a href="#">Project Two Name</a>
-                <span class="year">2023</span>
-            </li>
-            <li>
-                <a href="#">A Case Study</a>
-                <span class="year">2023</span>
-            </li>
-            <li>
-                <a href="https://github.com/yourusername">My GitHub Profile</a>
-                <span class="year">Link</span>
-            </li>
+            <li><a href="#">Another Game Title</a> - (2023)</li>
+            <li><a href="#">Game Jam Entry #4</a> - (2022)</li>
+            <li><a href="https://github.com/yourusername">Github Repository</a></li>
+            <li><a href="mailto:you@email.com">Send Message</a></li>
         </ul>
     </section>
 
-    <!-- 3. The Footer / Contact -->
-    <footer class="footer">
-        <p>Don't be a stranger.</p>
-        <a href="mailto:your@email.com" style="font-size: 1.5rem;">your@email.com</a>
+    <footer style="margin-top: 4rem; opacity: 0.5; font-size: 1rem;">
+        <p>© 2025 [Your Name]. All rights reserved.</p>
     </footer>
 
 </body>
