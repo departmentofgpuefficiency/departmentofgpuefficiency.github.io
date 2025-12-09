@@ -5,26 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Portfolio</title>
     
-    <!-- IMPORT THE PIXEL FONT FROM GOOGLE -->
+    <!-- FONTS: Silkscreen (Headers) and VT323 (Body text) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS STYLES */
         :root {
-            --bg-color: #1a1a1a;       /* Dark Grey Background */
-            --text-color: #c0c0c0;     /* Light Grey Text */
-            --accent-color: #4aff4d;   /* Retro Terminal Green */
+            --bg-color: #1a1a1a;
+            --text-color: #c0c0c0;
+            --accent-color: #4aff4d; /* Green */
             --spacing: 2rem;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            /* This line applies the pixel font */
             font-family: 'VT323', monospace; 
-            font-size: 1.4rem; /* Pixel fonts need to be bigger to be readable */
+            font-size: 1.5rem;
             margin: 0;
             padding: var(--spacing);
             line-height: 1.2;
@@ -33,112 +31,107 @@
             margin-right: auto;
         }
 
-        /* Typography */
+        /* Use a blockier pixel font for headers */
+        h1, h2 {
+            font-family: 'Silkscreen', cursive;
+            font-weight: 400;
+        }
+
         h1 {
-            font-size: 3rem; 
+            font-size: 2.5rem; 
             color: var(--accent-color);
-            text-transform: uppercase;
             margin-bottom: var(--spacing);
-            text-shadow: 2px 2px 0px #000; /* Drop shadow for game feel */
+            text-shadow: 3px 3px 0px #000;
         }
 
         h2 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: var(--text-color);
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 0.5rem;
             margin-top: 3rem;
         }
 
-        p {
-            max-width: 600px;
-            margin-bottom: 1.5rem;
-        }
-
         /* Links */
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
+        a { color: var(--accent-color); text-decoration: none; }
+        a:hover { background-color: var(--accent-color); color: var(--bg-color); }
 
-        a:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color); /* Invert colors on hover */
-            cursor: pointer;
-        }
-
-        /* THE GAME EMBED SECTION */
-        .game-wrapper {
-            margin-top: 2rem;
+        /* THE GAME WIDGET CARD */
+        .game-card {
             border: 2px solid var(--accent-color);
-            padding: 1rem;
             background: #000;
-            text-align: center;
-        }
-        
-        /* This forces the itch.io iframe to fit your screen */
-        .game-wrapper iframe {
-            max-width: 100%; 
-        }
-
-        /* List Styles */
-        ul {
-            list-style: square; /* Square bullets match pixel art */
-            padding-left: 2rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
         }
 
-        li {
-            margin-bottom: 0.5rem;
+        /* Button style for the game */
+        .play-btn {
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 10px 20px;
+            font-family: 'Silkscreen', cursive;
+            font-size: 1.2rem;
+            border: 2px solid #000;
+            box-shadow: 4px 4px 0px #fff;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            :root { --spacing: 1rem; }
-            h1 { font-size: 2.5rem; }
+        .play-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #fff;
         }
+
+        ul { list-style: square; padding-left: 2rem; }
+        li { margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>PLAYER ONE: [YOUR NAME]</h1>
-        
         <p>
-            > Insert coin to start...<br>
-            > I build pixel art games and interactive web experiences.
+            > Godot 4 Developer.<br>
+            > Pixel Artist.<br>
+            > Web Explorer.
         </p>
     </header>
 
-    <!-- SECTION: PLAY MY GAME -->
     <section>
-        <h2>Currently Playing</h2>
-        <p>You can play my latest build right here in the browser:</p>
+        <h2>Latest Release</h2>
+        <p>Currently testing specific mechanics in Godot 4.</p>
         
-        <div class="game-wrapper">
+        <!-- THE GAME CARD -->
+        <div class="game-card">
+            <p style="color: white; margin: 0;">PROJECT: TEST3</p>
+            
             <!-- 
-               INSTRUCTIONS:
-               1. Go to your game page on Itch.io
-               2. Click "Edit Game" -> "Distribute" -> "Embed Game"
-               3. Copy the "iframe" code they give you.
-               4. DELETE the line below and PASTE your itch code there.
+                This uses the Itch Widget instead of the full game.
+                It's faster, cleaner, and doesn't crash browsers.
             -->
-            <iframe frameborder="0" src="https://itch.io/embed-upload/14625602?color=333333" allowfullscreen="" width="640" height="380"><a href="https://stefan8102.itch.io/test3">Play test3 on itch.io</a></iframe>
+            <iframe frameborder="0" src="https://itch.io/embed/3196232" width="552" height="167"><a href="https://stefan8102.itch.io/test3">test3 by stefan8102</a></iframe>
+            
+            <br>
+            <a href="https://stefan8102.itch.io/test3" target="_blank" class="play-btn">
+                PLAY FULLSCREEN
+            </a>
         </div>
     </section>
 
-    <!-- SECTION: OTHER LINKS -->
     <section>
         <h2>Quest Log</h2>
         <ul>
-            <li><a href="#">Another Game Title</a> - (2023)</li>
-            <li><a href="#">Game Jam Entry #4</a> - (2022)</li>
             <li><a href="https://github.com/yourusername">Github Repository</a></li>
-            <li><a href="mailto:you@email.com">Send Message</a></li>
+            <li><a href="mailto:you@email.com">Contact Me</a></li>
         </ul>
     </section>
 
     <footer style="margin-top: 4rem; opacity: 0.5; font-size: 1rem;">
-        <p>© 2025 [Your Name]. All rights reserved.</p>
+        <p>© 2025. Insert Coin.</p>
     </footer>
 
 </body>
