@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Portfolio</title>
     
-    <!-- FONTS: Silkscreen (Headers) and VT323 (Body text) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
@@ -31,59 +30,62 @@
             margin-right: auto;
         }
 
-        /* Use a blockier pixel font for headers */
-        h1, h2 {
-            font-family: 'Silkscreen', cursive;
-            font-weight: 400;
-        }
+        h1, h2 { font-family: 'Silkscreen', cursive; font-weight: 400; }
+        h1 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: var(--spacing); text-shadow: 3px 3px 0px #000; }
+        h2 { font-size: 1.5rem; color: var(--text-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; margin-top: 3rem; }
 
-        h1 {
-            font-size: 2.5rem; 
-            color: var(--accent-color);
-            margin-bottom: var(--spacing);
-            text-shadow: 3px 3px 0px #000;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            margin-top: 3rem;
-        }
-
-        /* Links */
         a { color: var(--accent-color); text-decoration: none; }
         a:hover { background-color: var(--accent-color); color: var(--bg-color); }
 
-        /* THE GAME WIDGET CARD */
+        /* THE NEW CARD DESIGN - No iFrame, just pure CSS */
         .game-card {
             border: 2px solid var(--accent-color);
             background: #000;
-            padding: 1rem;
+            padding: 2rem;
             margin-top: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 8px 8px 0px #0a0a0a;
         }
 
-        /* Button style for the game */
+        .game-title {
+            font-family: 'Silkscreen', cursive;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .game-desc {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* The Big Play Button */
         .play-btn {
+            display: inline-block;
             background-color: var(--accent-color);
             color: #000;
-            padding: 10px 20px;
+            padding: 15px 30px;
             font-family: 'Silkscreen', cursive;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             border: 2px solid #000;
             box-shadow: 4px 4px 0px #fff;
             cursor: pointer;
+            text-decoration: none;
             transition: transform 0.1s;
         }
 
+        .play-btn:hover {
+            background-color: #fff;
+            color: #000;
+            box-shadow: 4px 4px 0px var(--accent-color);
+        }
+
         .play-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px #fff;
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px;
         }
 
         ul { list-style: square; padding-left: 2rem; }
@@ -103,20 +105,18 @@
 
     <section>
         <h2>Latest Release</h2>
-        <p>Currently testing specific mechanics in Godot 4.</p>
         
-        <!-- THE GAME CARD -->
+        <!-- THE NEW CARD -->
         <div class="game-card">
-            <p style="color: white; margin: 0;">PROJECT: TEST3</p>
+            <span class="game-title">PROJECT: TEST3</span>
+            <p class="game-desc">
+                A pixel-art experiment built in Godot 4.4.<br>
+                Playable in browser.
+            </p>
             
-            <!-- Playable game embed -->
-            <iframe frameborder="0" src="https://itch.io/embed-upload/14625602?color=333333" allowfullscreen width="640" height="380">
-                <a href="https://stefan8102.itch.io/test3">Play test3 on itch.io</a>
-            </iframe>
-            
-            <br>
+            <!-- This link goes to your itch page. It is 100% reliable. -->
             <a href="https://stefan8102.itch.io/test3" target="_blank" class="play-btn">
-                PLAY FULLSCREEN
+                START GAME
             </a>
         </div>
     </section>
@@ -127,7 +127,6 @@
             <li><a href="https://github.com/yourusername">Github Repository</a></li>
             <li><a href="mailto:you@email.com">Contact Me</a></li>
         </ul>
-    </ul>
     </section>
 
     <footer style="margin-top: 4rem; opacity: 0.5; font-size: 1rem;">
