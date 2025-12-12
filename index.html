@@ -4,253 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Garden Hermit</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     
-    <!-- FONTS: VT323 is the quintessential RPG/Pixel font -->
+    <!-- FONT: VT323 (The standard for pixel interfaces) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* HERMITAGE PALETTE */
-            --bg-color: #1a1c2c;       /* Night Sky Blue/Black */
-            --container-bg: #2b2b45;   /* Lighter Blue/Grey for the box */
-            --text-color: #dcdacb;     /* Parchment / Old Paper */
-            --accent-color: #74c99e;   /* Moss Green */
+            --text-color: #f0f0f0;
             --highlight: #f4b41b;      /* Lantern Gold */
-            --border-width: 4px;
+            --shadow: #000000;
+        }
+
+        /* 1. THE WORLD SETTINGS */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
 
         body {
-            background-color: var(--bg-color);
+            font-family: 'VT323', monospace;
             color: var(--text-color);
-            font-family: 'VT323', monospace; 
-            font-size: 1.6rem; /* Large, readable text */
-            margin: 0;
-            padding: 1rem;
-            line-height: 1.4;
+            
+            /* THE MAGIC LINE: This keeps pixel art sharp when scaled up */
+            image-rendering: pixelated; 
+            
+            /* CUSTOM CURSOR */
+            cursor: url('Cursortest.png'), auto; 
+
+            /* THE GRASS BACKGROUND */
+            /* We load the tiny 16x16 image, but tell CSS to draw it at 64x64 (4x zoom) */
+            background-image: url('grass.png');
+            background-repeat: repeat;
+            background-size: 64px 64px; 
+        }
+
+        /* 2. LAYOUT CONTAINER */
+        .world-container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centers vertically if page is short */
             min-height: 100vh;
-            background-image: radial-gradient(#262b44 1px, transparent 1px);
-            background-size: 20px 20px; /* Subtle grid pattern like old graph paper */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* The Main Container - The "Hut" */
-        .hermitage {
-            max-width: 700px;
+        /* 3. THE HERMIT SCENE */
+        .scene-display {
+            /* This holds your hermit image */
+            max-width: 100%;
+            width: 600px; /* Adjust this to control how big the scene gets */
+            
+            /* Subtle float animation to make it feel alive */
+            animation: breathe 4s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* 4. THE UI / TEXT LAYER */
+        .dialogue-box {
+            margin-top: -20px; /* Pulls text slightly up towards the image */
+            max-width: 600px;
             width: 100%;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            background: var(--container-bg);
-            border: var(--border-width) solid var(--text-color);
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark backing for readability */
             padding: 2rem;
-            box-shadow: 10px 10px 0px #0b0c16; /* Hard pixel shadow */
-            position: relative;
-        }
-
-        /* The Header Area */
-        header {
-            border-bottom: 2px dashed var(--accent-color);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
+            border: 4px solid var(--text-color);
+            box-shadow: 8px 8px 0px var(--shadow);
             text-align: center;
+            backdrop-filter: blur(2px); /* Blurs the grass behind the text slightly */
         }
 
         h1 {
-            font-size: 3rem; 
-            color: var(--accent-color);
-            margin: 0;
+            font-size: 3rem;
+            color: var(--highlight);
+            text-shadow: 3px 3px 0px var(--shadow);
+            margin: 0 0 1rem 0;
             text-transform: uppercase;
-            text-shadow: 2px 2px 0px #000;
-            letter-spacing: 2px;
         }
 
-        .subtitle {
-            color: var(--highlight);
-            font-size: 1.2rem;
-            opacity: 0.8;
-            margin-top: 0.5rem;
-            display: block;
-        }
-
-        /* Text Styling */
         p {
-            margin-bottom: 1.5rem;
-        }
-
-        .narrative-text {
-            border-left: 4px solid var(--accent-color);
-            padding-left: 1rem;
-            font-style: italic;
-            background: rgba(0,0,0,0.2);
-            padding: 1rem;
-        }
-
-        /* SECTIONS */
-        h2 {
-            font-size: 2rem;
-            color: var(--highlight);
-            margin-top: 3rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--text-color);
-        }
-
-        /* THE ARTIFACT (Game Card) */
-        .artifact-card {
-            border: 2px solid var(--highlight);
-            background: #12121c;
-            padding: 1.5rem;
-            text-align: center;
-            margin-top: 1rem;
-            transition: transform 0.2s;
-        }
-
-        .artifact-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent-color);
-        }
-
-        .play-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            background-color: var(--accent-color);
-            color: #0b0c16;
-            padding: 10px 25px;
             font-size: 1.5rem;
-            text-decoration: none;
-            border: 2px solid var(--text-color);
-            box-shadow: 4px 4px 0px #000;
-        }
-        
-        .play-btn:hover {
-            background-color: var(--highlight);
-            cursor: pointer;
+            line-height: 1.4;
+            text-shadow: 2px 2px 0px var(--shadow);
         }
 
-        /* LINKS LIST */
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            padding: 0.5rem;
-        }
-
-        li:hover {
-            border: 1px dashed var(--accent-color);
-            background: rgba(0,0,0,0.2);
-        }
-
-        a.link {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        
-        a.link:hover {
-            color: var(--highlight);
-            text-decoration: underline;
-        }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            font-size: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Blinking Cursor Effect */
-        .cursor {
+        /* 5. INTERACTIVE LINKS (BUTTONS) */
+        .action-btn {
             display: inline-block;
-            width: 10px;
-            height: 1.5rem;
-            background-color: var(--accent-color);
-            animation: blink 1s infinite;
-            vertical-align: middle;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            color: #000;
+            background-color: var(--highlight);
+            text-decoration: none;
+            border: 2px solid #fff;
+            box-shadow: 4px 4px 0px var(--shadow);
+            
+            /* Custom cursor for links too */
+            cursor: url('Cursortest.png'), pointer; 
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .action-btn:hover {
+            background-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 6px 6px 0px var(--shadow);
         }
 
-        /* Mobile Fix */
+        /* 6. AUDIO CONTROLS (Fixed to top right) */
+        .audio-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 64px; /* Displayed size (2x the 32px file) */
+            height: 64px;
+            cursor: url('Cursortest.png'), pointer;
+            z-index: 100;
+            transition: transform 0.1s;
+        }
+        
+        .audio-toggle:active {
+            transform: scale(0.9);
+        }
+
+        /* Mobile Adjustments */
         @media (max-width: 600px) {
-            .hermitage { border-width: 2px; padding: 1rem; }
-            h1 { font-size: 2.2rem; }
+            .scene-display { width: 100%; }
+            h1 { font-size: 2rem; }
+            p { font-size: 1.2rem; }
+            .audio-toggle { width: 48px; height: 48px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="hermitage">
+    <!-- AUDIO PLAYER (Hidden) -->
+    <!-- loop="true" makes it repeat forever -->
+    <audio id="bgm" loop>
+        <source src="ambience.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- AUDIO BUTTON (Top Right) -->
+    <img id="speaker-icon" src="speakeroff.png" alt="Toggle Sound" class="audio-toggle" onclick="toggleAudio()">
+
+    <!-- MAIN WORLD -->
+    <div class="world-container">
         
-        <header>
+        <!-- THE SCENE (Your Art) -->
+        <img src="scenetest.png" alt="The Hermitage" class="scene-display">
+
+        <!-- THE DIALOGUE (Your Content) -->
+        <div class="dialogue-box">
             <h1>The Garden Hermit</h1>
-            <span class="subtitle">Pixelart Hermitage & Strange Insights</span>
-        </header>
+            <p>
+                "Welcome, traveler. I am a different mind. 
+                I build digital curiosities and offer strange insights."
+            </p>
 
-        <!-- INTRO: THE HOOK -->
-        <p>
-            Welcome to the hermitage. <span class="cursor"></span>
-        </p>
+            <br>
 
-        <div class="narrative-text">
-            "I am the garden hermit. A different mind. A builder of digital curiosities. 
-            I offer my services not through a job listing, but through this garden."
+            <!-- ACTION 1: The Pitch / Content -->
+            <a href="#" class="action-btn">Read Scrolls</a>
+            
+            <!-- ACTION 2: The Game (Link to Itch) -->
+            <a href="https://stefan8102.itch.io/test3" target="_blank" class="action-btn">Enter Portal</a>
+            
+            <!-- ACTION 3: Contact -->
+            <a href="mailto:your@email.com" class="action-btn">Send Raven</a>
         </div>
 
-        <p>
-            This website is a proof of concept. It is proof that I can channel ideas into something novel, structured, and functioning. 
-            It is a signal of learning ability, AI integration, and the urge to make pretty things.
-        </p>
-
-        <!-- THE ARTIFACT: YOUR GODOT GAME -->
-        <section>
-            <h2>Artifact No. 1: "Test3"</h2>
-            <p>A pixel-art experiment built in Godot 4. Proof that I can build interactive systems.</p>
-            
-            <div class="artifact-card">
-                <p style="color: var(--highlight); margin:0;">[ INTERACTIVE SIMULATION ]</p>
-                <br>
-                <!-- This links to Itch.io properly -->
-                <a href="https://stefan8102.itch.io/test3" target="_blank" class="play-btn">
-                    ENTER THE PORTAL
-                </a>
-                <p style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.6;">(Opens in new dimension/tab)</p>
-            </div>
-        </section>
-
-        <!-- THE OFFER / LINKS -->
-        <section>
-            <h2>The Offer</h2>
-            <p>If you are tired of standard applications and seek a different perspective, you are in the right place.</p>
-            
-            <ul>
-                <li>
-                    <span>> </span>
-                    <a href="#" class="link">Read the Insight Memos (Coming Soon)</a>
-                </li>
-                <li>
-                    <span>> </span>
-                    <a href="https://github.com/yourusername" class="link">Inspect the Code (GitHub)</a>
-                </li>
-                <li>
-                    <span>> </span>
-                    <a href="mailto:your@email.com" class="link">Send a Raven (Email Me)</a>
-                </li>
-            </ul>
-        </section>
-
-        <footer>
-            Built with 0% Coding Knowledge & 100% AI Assistance.<br>
-            © 2025 The Garden Hermit.
-        </footer>
-
     </div>
+
+    <!-- JAVASCRIPT FOR AUDIO -->
+    <script>
+        var audio = document.getElementById("bgm");
+        var icon = document.getElementById("speaker-icon");
+        var isPlaying = false;
+
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                icon.src = "speakeroff.png"; // Switch to OFF image
+            } else {
+                audio.play();
+                icon.src = "speakeron.png"; // Switch to ON image
+                audio.volume = 0.5; // Set volume to 50%
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
 
 </body>
 </html>
