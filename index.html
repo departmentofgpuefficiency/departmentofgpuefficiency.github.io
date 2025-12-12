@@ -3,135 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Portfolio</title>
+    <title>The Garden Hermit</title>
     
+    <!-- FONTS: VT323 is the quintessential RPG/Pixel font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #1a1a1a;
-            --text-color: #c0c0c0;
-            --accent-color: #4aff4d; /* Green */
-            --spacing: 2rem;
+            /* HERMITAGE PALETTE */
+            --bg-color: #1a1c2c;       /* Night Sky Blue/Black */
+            --container-bg: #2b2b45;   /* Lighter Blue/Grey for the box */
+            --text-color: #dcdacb;     /* Parchment / Old Paper */
+            --accent-color: #74c99e;   /* Moss Green */
+            --highlight: #f4b41b;      /* Lantern Gold */
+            --border-width: 4px;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'VT323', monospace; 
-            font-size: 1.5rem;
+            font-size: 1.6rem; /* Large, readable text */
             margin: 0;
-            padding: var(--spacing);
-            line-height: 1.2;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            padding: 1rem;
+            line-height: 1.4;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: radial-gradient(#262b44 1px, transparent 1px);
+            background-size: 20px 20px; /* Subtle grid pattern like old graph paper */
         }
 
-        h1, h2 { font-family: 'Silkscreen', cursive; font-weight: 400; }
-        h1 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: var(--spacing); text-shadow: 3px 3px 0px #000; }
-        h2 { font-size: 1.5rem; color: var(--text-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; margin-top: 3rem; }
-
-        a { color: var(--accent-color); text-decoration: none; }
-        a:hover { background-color: var(--accent-color); color: var(--bg-color); }
-
-        /* THE NEW CARD DESIGN - No iFrame, just pure CSS */
-        .game-card {
-            border: 2px solid var(--accent-color);
-            background: #000;
-            padding: 2rem;
+        /* The Main Container - The "Hut" */
+        .hermitage {
+            max-width: 700px;
+            width: 100%;
             margin-top: 2rem;
-            text-align: center;
+            margin-bottom: 2rem;
+            background: var(--container-bg);
+            border: var(--border-width) solid var(--text-color);
+            padding: 2rem;
+            box-shadow: 10px 10px 0px #0b0c16; /* Hard pixel shadow */
             position: relative;
-            box-shadow: 8px 8px 0px #0a0a0a;
         }
 
-        .game-title {
-            font-family: 'Silkscreen', cursive;
-            font-size: 2rem;
-            color: #fff;
-            margin-bottom: 1rem;
+        /* The Header Area */
+        header {
+            border-bottom: 2px dashed var(--accent-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem; 
+            color: var(--accent-color);
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--highlight);
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
             display: block;
         }
 
-        .game-desc {
-            margin-bottom: 2rem;
-            font-size: 1.2rem;
-            color: #aaa;
+        /* Text Styling */
+        p {
+            margin-bottom: 1.5rem;
         }
 
-        /* The Big Play Button */
+        .narrative-text {
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+            font-style: italic;
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+        }
+
+        /* SECTIONS */
+        h2 {
+            font-size: 2rem;
+            color: var(--highlight);
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--text-color);
+        }
+
+        /* THE ARTIFACT (Game Card) */
+        .artifact-card {
+            border: 2px solid var(--highlight);
+            background: #12121c;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .artifact-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-color);
+        }
+
         .play-btn {
             display: inline-block;
+            margin-top: 1rem;
             background-color: var(--accent-color);
-            color: #000;
-            padding: 15px 30px;
-            font-family: 'Silkscreen', cursive;
+            color: #0b0c16;
+            padding: 10px 25px;
             font-size: 1.5rem;
-            border: 2px solid #000;
-            box-shadow: 4px 4px 0px #fff;
-            cursor: pointer;
             text-decoration: none;
-            transition: transform 0.1s;
+            border: 2px solid var(--text-color);
+            box-shadow: 4px 4px 0px #000;
         }
-
+        
         .play-btn:hover {
-            background-color: #fff;
-            color: #000;
-            box-shadow: 4px 4px 0px var(--accent-color);
+            background-color: var(--highlight);
+            cursor: pointer;
         }
 
-        .play-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 0px 0px 0px;
+        /* LINKS LIST */
+        ul {
+            list-style: none;
+            padding: 0;
         }
 
-        ul { list-style: square; padding-left: 2rem; }
-        li { margin-bottom: 0.5rem; }
+        li {
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            padding: 0.5rem;
+        }
+
+        li:hover {
+            border: 1px dashed var(--accent-color);
+            background: rgba(0,0,0,0.2);
+        }
+
+        a.link {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        a.link:hover {
+            color: var(--highlight);
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Blinking Cursor Effect */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.5rem;
+            background-color: var(--accent-color);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Mobile Fix */
+        @media (max-width: 600px) {
+            .hermitage { border-width: 2px; padding: 1rem; }
+            h1 { font-size: 2.2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>PLAYER ONE: [YOUR NAME]</h1>
-        <p>
-            > Godot 4 Developer.<br>
-            > Pixel Artist.<br>
-            > Web Explorer.
-        </p>
-    </header>
-
-    <section>
-        <h2>Latest Release</h2>
+    <div class="hermitage">
         
-        <!-- THE NEW CARD -->
-        <div class="game-card">
-            <span class="game-title">PROJECT: TEST3</span>
-            <p class="game-desc">
-                A pixel-art experiment built in Godot 4.4.<br>
-                Playable in browser.
-            </p>
-            
-            <!-- This link goes to your itch page. It is 100% reliable. -->
-            <a href="https://stefan8102.itch.io/test3" target="_blank" class="play-btn">
-                START GAME
-            </a>
+        <header>
+            <h1>The Garden Hermit</h1>
+            <span class="subtitle">Pixelart Hermitage & Strange Insights</span>
+        </header>
+
+        <!-- INTRO: THE HOOK -->
+        <p>
+            Welcome to the hermitage. <span class="cursor"></span>
+        </p>
+
+        <div class="narrative-text">
+            "I am the garden hermit. A different mind. A builder of digital curiosities. 
+            I offer my services not through a job listing, but through this garden."
         </div>
-    </section>
 
-    <section>
-        <h2>Quest Log</h2>
-        <ul>
-            <li><a href="https://github.com/yourusername">Github Repository</a></li>
-            <li><a href="mailto:you@email.com">Contact Me</a></li>
-        </ul>
-    </section>
+        <p>
+            This website is a proof of concept. It is proof that I can channel ideas into something novel, structured, and functioning. 
+            It is a signal of learning ability, AI integration, and the urge to make pretty things.
+        </p>
 
-    <footer style="margin-top: 4rem; opacity: 0.5; font-size: 1rem;">
-        <p>© 2025. Insert Coin.</p>
-    </footer>
+        <!-- THE ARTIFACT: YOUR GODOT GAME -->
+        <section>
+            <h2>Artifact No. 1: "Test3"</h2>
+            <p>A pixel-art experiment built in Godot 4. Proof that I can build interactive systems.</p>
+            
+            <div class="artifact-card">
+                <p style="color: var(--highlight); margin:0;">[ INTERACTIVE SIMULATION ]</p>
+                <br>
+                <!-- This links to Itch.io properly -->
+                <a href="https://stefan8102.itch.io/test3" target="_blank" class="play-btn">
+                    ENTER THE PORTAL
+                </a>
+                <p style="font-size: 0.9rem; margin-top: 1rem; opacity: 0.6;">(Opens in new dimension/tab)</p>
+            </div>
+        </section>
+
+        <!-- THE OFFER / LINKS -->
+        <section>
+            <h2>The Offer</h2>
+            <p>If you are tired of standard applications and seek a different perspective, you are in the right place.</p>
+            
+            <ul>
+                <li>
+                    <span>> </span>
+                    <a href="#" class="link">Read the Insight Memos (Coming Soon)</a>
+                </li>
+                <li>
+                    <span>> </span>
+                    <a href="https://github.com/yourusername" class="link">Inspect the Code (GitHub)</a>
+                </li>
+                <li>
+                    <span>> </span>
+                    <a href="mailto:your@email.com" class="link">Send a Raven (Email Me)</a>
+                </li>
+            </ul>
+        </section>
+
+        <footer>
+            Built with 0% Coding Knowledge & 100% AI Assistance.<br>
+            © 2025 The Garden Hermit.
+        </footer>
+
+    </div>
 
 </body>
 </html>
