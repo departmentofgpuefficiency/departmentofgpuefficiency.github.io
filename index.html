@@ -6,7 +6,6 @@
     <title>The Garden Hermit</title>
     <link rel="icon" type="image/png" href="favicon.png">
     
-    <!-- FONT: VT323 (The standard for pixel interfaces) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
@@ -14,176 +13,215 @@
     <style>
         :root {
             --text-color: #f0f0f0;
-            --highlight: #f4b41b;      /* Lantern Gold */
+            --highlight: #f4b41b;
             --shadow: #000000;
         }
 
-        /* 1. THE WORLD SETTINGS */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+        html {
+            /* Smooth scrolling makes the journey feel nicer */
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'VT323', monospace;
             color: var(--text-color);
+            margin: 0;
+            padding: 0;
             
-            /* THE MAGIC LINE: This keeps pixel art sharp when scaled up */
+            /* PIXEL ART SETTINGS */
             image-rendering: pixelated; 
             
-            /* CUSTOM CURSOR */
-            cursor: url('Cursortest.png'), auto; 
+            /* CURSOR - CASE SENSITIVE! Check if your file is Cursortest.png or cursortest.png */
+            cursor: url('Cursortest.PNG'), auto; 
 
-            /* THE GRASS BACKGROUND */
-            /* We load the tiny 16x16 image, but tell CSS to draw it at 64x64 (4x zoom) */
+            /* BACKGROUND */
             background-image: url('grass.png');
             background-repeat: repeat;
-            background-size: 64px 64px; 
+            background-size: 64px 64px; /* Big chunky grass */
         }
 
-        /* 2. LAYOUT CONTAINER */
-        .world-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* Centers vertically if page is short */
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* 3. THE HERMIT SCENE */
-        .scene-display {
-            /* This holds your hermit image */
-            max-width: 100%;
-            width: 600px; /* Adjust this to control how big the scene gets */
-            
-            /* Subtle float animation to make it feel alive */
-            animation: breathe 4s infinite ease-in-out;
-        }
-
-        @keyframes breathe {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* 4. THE UI / TEXT LAYER */
-        .dialogue-box {
-            margin-top: -20px; /* Pulls text slightly up towards the image */
-            max-width: 600px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark backing for readability */
-            padding: 2rem;
-            border: 4px solid var(--text-color);
-            box-shadow: 8px 8px 0px var(--shadow);
-            text-align: center;
-            backdrop-filter: blur(2px); /* Blurs the grass behind the text slightly */
-        }
-
-        h1 {
-            font-size: 3rem;
-            color: var(--highlight);
-            text-shadow: 3px 3px 0px var(--shadow);
-            margin: 0 0 1rem 0;
-            text-transform: uppercase;
-        }
-
-        p {
-            font-size: 1.5rem;
-            line-height: 1.4;
-            text-shadow: 2px 2px 0px var(--shadow);
-        }
-
-        /* 5. INTERACTIVE LINKS (BUTTONS) */
-        .action-btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 1.5rem;
-            color: #000;
-            background-color: var(--highlight);
-            text-decoration: none;
-            border: 2px solid #fff;
-            box-shadow: 4px 4px 0px var(--shadow);
-            
-            /* Custom cursor for links too */
-            cursor: url('Cursortest.png'), pointer; 
-        }
-
-        .action-btn:hover {
-            background-color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 6px 6px 0px var(--shadow);
-        }
-
-        /* 6. AUDIO CONTROLS (Fixed to top right) */
+        /* AUDIO TOGGLE - Fixed to screen */
         .audio-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 64px; /* Displayed size (2x the 32px file) */
-            height: 64px;
-            cursor: url('Cursortest.png'), pointer;
-            z-index: 100;
-            transition: transform 0.1s;
-        }
-        
-        .audio-toggle:active {
-            transform: scale(0.9);
+            width: 48px; 
+            height: 48px;
+            cursor: pointer;
+            z-index: 1000;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .scene-display { width: 100%; }
-            h1 { font-size: 2rem; }
-            p { font-size: 1.2rem; }
-            .audio-toggle { width: 48px; height: 48px; }
+        /* MAIN CONTAINER */
+        .journey-container {
+            max-width: 700px;
+            margin: 0 auto; /* Centers the path */
+            padding-bottom: 100px; /* Space at the bottom */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        /* 1. THE HERMIT (TOP SECTION) */
+        .hermit-section {
+            margin-top: 50px;
+            text-align: center;
+            /* No animation */
+        }
+
+        .hermit-img {
+            /* This makes the hermit big (4x scale to match grass) */
+            width: 100%; 
+            max-width: 500px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* 2. TEXT BLOCKS (THE "PARCHMENTS") */
+        .text-block {
+            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+            padding: 2rem;
+            margin-top: 4rem; /* Adds the "Travel distance" between items */
+            border: 2px solid #555;
+            box-shadow: 8px 8px 0px var(--shadow);
+            width: 90%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        h1 {
+            color: var(--highlight);
+            text-transform: uppercase;
+            font-size: 3rem;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--highlight);
+            border-bottom: 1px dashed #fff;
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* 3. THE GAME PORTAL */
+        .portal-frame {
+            margin-top: 6rem;
+            text-align: center;
+            border: 4px solid var(--highlight);
+            padding: 10px;
+            background: #000;
+            box-shadow: 10px 10px 0px var(--shadow);
+        }
+
+        .action-btn {
+            display: inline-block;
+            background: var(--highlight);
+            color: #000;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer; /* Fallback */
+            cursor: url('Cursortest.png'), pointer;
+        }
+
+        .action-btn:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* HELPER: SCROLL ARROW */
+        .scroll-indicator {
+            margin-top: 2rem;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- AUDIO PLAYER (Hidden) -->
-    <!-- loop="true" makes it repeat forever -->
+    <!-- AUDIO -->
     <audio id="bgm" loop>
+        <!-- Ensure filename matches exactly! -->
         <source src="ambience.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- AUDIO BUTTON (Top Right) -->
-    <img id="speaker-icon" src="speakeroff.png" alt="Toggle Sound" class="audio-toggle" onclick="toggleAudio()">
+    <!-- SPEAKER ICON - Ensure filename matches exactly! -->
+    <img id="speaker-icon" src="speakeroff.PNG" alt="Sound" class="audio-toggle" onclick="toggleAudio()">
 
-    <!-- MAIN WORLD -->
-    <div class="world-container">
-        
-        <!-- THE SCENE (Your Art) -->
-        <img src="scenetest.png" alt="The Hermitage" class="scene-display">
+    <div class="journey-container">
 
-        <!-- THE DIALOGUE (Your Content) -->
-        <div class="dialogue-box">
+        <!-- SECTION 1: THE ARRIVAL -->
+        <div class="hermit-section">
+            <!-- Ensure filename matches exactly! -->
+            <img src="scenetest.png" alt="The Hermit" class="hermit-img">
+            
+            <div class="scroll-indicator">
+                \/ <br> Scroll to Explore
+            </div>
+        </div>
+
+        <!-- SECTION 2: THE INTRODUCTION -->
+        <div class="text-block">
             <h1>The Garden Hermit</h1>
             <p>
-                "Welcome, traveler. I am a different mind. 
-                I build digital curiosities and offer strange insights."
+                You have stumbled upon a digital microcosm. 
+                Here, I cultivate ideas and pixelated structures.
             </p>
+            <p>
+                I am not a coder. I am a builder using new tools to forge 
+                proof of concept.
+            </p>
+        </div>
 
-            <br>
+        <!-- SECTION 3: THE ARTIFACT (GAME) -->
+        <div class="text-block">
+            <h2>Current Project</h2>
+            <p>
+                A simulation of systems. A test of logic. 
+                Built in Godot 4.
+            </p>
+            
+            <div class="portal-frame">
+                <p style="color: #fff; margin:0;">[ PROTOTYPE TEST3 ]</p>
+                <br>
+                <a href="https://stefan8102.itch.io/test3" target="_blank" class="action-btn">
+                    ENTER PORTAL
+                </a>
+            </div>
+        </div>
 
-            <!-- ACTION 1: The Pitch / Content -->
-            <a href="#" class="action-btn">Read Scrolls</a>
-            
-            <!-- ACTION 2: The Game (Link to Itch) -->
-            <a href="https://stefan8102.itch.io/test3" target="_blank" class="action-btn">Enter Portal</a>
-            
-            <!-- ACTION 3: Contact -->
-            <a href="mailto:your@email.com" class="action-btn">Send Raven</a>
+        <!-- SECTION 4: CONTACT -->
+        <div class="text-block" style="text-align: center;">
+            <h2>Send a Raven</h2>
+            <p>
+                The Hermit is listening.
+            </p>
+            <a href="mailto:your@email.com" class="action-btn">
+                Email Me
+            </a>
+            <br><br>
+            <a href="https://github.com/yourusername" style="color: #fff;">
+                (Inspect Source)
+            </a>
         </div>
 
     </div>
 
-    <!-- JAVASCRIPT FOR AUDIO -->
+    <!-- AUDIO SCRIPT -->
     <script>
         var audio = document.getElementById("bgm");
         var icon = document.getElementById("speaker-icon");
@@ -192,11 +230,13 @@
         function toggleAudio() {
             if (isPlaying) {
                 audio.pause();
-                icon.src = "speakeroff.png"; // Switch to OFF image
+                // Ensure filename matches exactly!
+                icon.src = "speakeroff.PNG"; 
             } else {
                 audio.play();
-                icon.src = "speakeron.png"; // Switch to ON image
-                audio.volume = 0.5; // Set volume to 50%
+                // Ensure filename matches exactly!
+                icon.src = "speakeron.PNG";
+                audio.volume = 0.5;
             }
             isPlaying = !isPlaying;
         }
