@@ -6,239 +6,355 @@
     <title>The Garden Hermit</title>
     <link rel="icon" type="image/png" href="favicon.png">
     
+    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --text-color: #f0f0f0;
-            --highlight: #f4b41b;
-            --shadow: #000000;
+            /* HERMIT MODE COLORS (Default) */
+            --bg-color: #1a1a1a;
+            --box-bg: #2b2b2b;
+            --text-color: #dcdacb;
+            --accent: #74c99e; /* Moss Green */
+            --border: 3px solid #000;
+            --shadow: 5px 5px 0px #000;
         }
 
-        html {
-            /* Smooth scrolling makes the journey feel nicer */
-            scroll-behavior: smooth;
+        /* DISCO MODE COLORS (Toggled via JS) */
+        body.disco-mode {
+            --bg-color: #220022;
+            --box-bg: #440044;
+            --text-color: #00ff00;
+            --accent: #ff00ff; /* Neon Pink */
+            --border: 3px solid #00ff00;
+            --shadow: 5px 5px 0px #ff00ff;
+            animation: disco-flash 2s infinite;
+        }
+
+        @keyframes disco-flash {
+            0% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+            100% { filter: hue-rotate(360deg); }
         }
 
         body {
-            font-family: 'VT323', monospace;
+            background-color: var(--bg-color);
             color: var(--text-color);
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
             margin: 0;
-            padding: 0;
-            
-            /* PIXEL ART SETTINGS */
-            image-rendering: pixelated; 
-            
-            /* CURSOR - CASE SENSITIVE! Check if your file is Cursortest.png or cursortest.png */
-            cursor: url('Cursortest.PNG'), auto; 
-
-            /* BACKGROUND */
+            padding: 20px;
+            /* Retro background tile */
             background-image: url('grass.png');
-            background-repeat: repeat;
-            background-size: 64px 64px; /* Big chunky grass */
+            background-size: 64px 64px;
+            image-rendering: pixelated;
+            cursor: url('Cursortest.png'), auto;
         }
 
-        /* AUDIO TOGGLE - Fixed to screen */
-        .audio-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 48px; 
-            height: 48px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        /* MAIN CONTAINER */
-        .journey-container {
-            max-width: 700px;
-            margin: 0 auto; /* Centers the path */
-            padding-bottom: 100px; /* Space at the bottom */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 1. THE HERMIT (TOP SECTION) */
-        .hermit-section {
-            margin-top: 50px;
-            text-align: center;
-            /* No animation */
-        }
-
-        .hermit-img {
-            /* This makes the hermit big (4x scale to match grass) */
-            width: 100%; 
-            max-width: 500px;
-            display: block;
+        /* --- THE GRID LAYOUT --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr; /* Sidebar | Left Content | Right Content */
+            gap: 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* 2. TEXT BLOCKS (THE "PARCHMENTS") */
-        .text-block {
-            background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
-            padding: 2rem;
-            margin-top: 4rem; /* Adds the "Travel distance" between items */
-            border: 2px solid #555;
-            box-shadow: 8px 8px 0px var(--shadow);
-            width: 90%;
-            max-width: 500px;
-            text-align: left;
+        /* UNIVERSAL BOX STYLE */
+        .box {
+            background: var(--box-bg);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            position: relative;
         }
 
-        h1 {
-            color: var(--highlight);
-            text-transform: uppercase;
-            font-size: 3rem;
-            margin-top: 0;
+        /* HEADER (Spans all columns except sidebar) */
+        .header-box {
+            grid-column: 2 / 4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; color: var(--accent); text-transform: uppercase; }
+
+        /* SIDEBAR (Sticky!) */
+        .sidebar-col {
+            grid-column: 1 / 2;
+            grid-row: 1 / 5; /* Spans down 4 rows */
+            height: 100%;
+        }
+
+        .sticky-wrapper {
+            position: sticky;
+            top: 20px; /* Sticks to top of screen when scrolling */
+        }
+
+        /* MAIN CONTENT AREAS */
+        .intro-box {
+            grid-column: 2 / 3;
+            min-height: 300px;
+        }
+
+        .hermitage-scene {
+            grid-column: 3 / 4;
+            grid-row: 2 / 4; /* Spans 2 rows tall */
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end; /* Aligns hermit to bottom */
+            justify-content: center;
+        }
+
+        .game-box {
+            grid-column: 2 / 3;
+            min-height: 300px;
+        }
+
+        .deep-text {
+            grid-column: 3 / 4;
+        }
+
+        .footer-box {
+            grid-column: 2 / 4;
             text-align: center;
-        }
-
-        h2 {
-            color: var(--highlight);
-            border-bottom: 1px dashed #fff;
-            padding-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.5rem;
-            line-height: 1.5;
-        }
-
-        /* 3. THE GAME PORTAL */
-        .portal-frame {
-            margin-top: 6rem;
-            text-align: center;
-            border: 4px solid var(--highlight);
-            padding: 10px;
-            background: #000;
-            box-shadow: 10px 10px 0px var(--shadow);
-        }
-
-        .action-btn {
-            display: inline-block;
-            background: var(--highlight);
-            color: #000;
-            padding: 15px 30px;
-            font-size: 1.5rem;
-            text-decoration: none;
-            font-weight: bold;
             margin-top: 20px;
-            cursor: pointer; /* Fallback */
-            cursor: url('Cursortest.png'), pointer;
         }
 
-        .action-btn:hover {
-            background: #fff;
-            transform: translateY(-2px);
+        .cozy-corner {
+            grid-column: 2 / 3;
         }
 
-        /* HELPER: SCROLL ARROW */
-        .scroll-indicator {
-            margin-top: 2rem;
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-            opacity: 0.7;
+        /* --- GRAPHICS & LAYERING --- */
+        .seamless-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures it fills the box */
+            pointer-events: none; /* Lets you click through it */
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+        /* Waterfall Animation (If you have a GIF) */
+        .waterfall-overlay {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            opacity: 0.8;
+            mix-blend-mode: overlay; /* Helps blend pixel art */
         }
 
+        /* BUTTONS */
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 5px 10px;
+            text-decoration: none;
+            border: 2px solid #000;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover { background: #fff; }
+
+        /* AUDIO TOGGLES */
+        .audio-btn {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        /* HIDDEN DISCO SWITCH */
+        .secret-switch {
+            font-size: 0.8rem;
+            opacity: 0.3;
+            cursor: help;
+            border: 1px dashed var(--accent);
+            padding: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .secret-switch:hover { opacity: 1; }
+
+        /* --- MOBILE LAYOUT --- */
+        @media (max-width: 800px) {
+            .bento-grid {
+                display: flex;
+                flex-direction: column;
+            }
+            .sidebar-col { order: 99; } /* Moves contact to bottom on mobile */
+            .header-box { order: 1; }
+            .intro-box { order: 2; }
+            .hermitage-scene { order: 3; min-height: 300px; }
+            .game-box { order: 4; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- AUDIO -->
-    <audio id="bgm" loop>
-        <!-- Ensure filename matches exactly! -->
+    <!-- AUDIO PLAYERS -->
+    <audio id="bgm-chill" loop>
         <source src="ambience.mp3" type="audio/mpeg">
     </audio>
+    <!-- You need a second file for disco mode, e.g. disco.mp3 -->
+    <audio id="bgm-disco" loop>
+        <source src="disco.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- SPEAKER ICON - Ensure filename matches exactly! -->
-    <img id="speaker-icon" src="speakeroff.PNG" alt="Sound" class="audio-toggle" onclick="toggleAudio()">
+    <div class="bento-grid">
 
-    <div class="journey-container">
+        <!-- 1. LEFT SIDEBAR (Sticky Contact) -->
+        <aside class="sidebar-col">
+            <div class="sticky-wrapper box">
+                <p>CONTACT THE HERMIT</p>
+                <hr style="border-color: var(--accent);">
+                <p style="font-size: 1rem;">
+                    Status: <span style="color:var(--accent)">Online</span><br>
+                    Mood: Contemplative
+                </p>
+                <a href="mailto:your@email.com" class="btn" style="width: 100%; box-sizing: border-box; text-align: center;">EMAIL ME</a>
+                <br><br>
+                <p style="font-size: 0.9rem; opacity: 0.7;">
+                    (This panel slides with you as you explore.)
+                </p>
+            </div>
+        </aside>
 
-        <!-- SECTION 1: THE ARRIVAL -->
-        <div class="hermit-section">
-            <!-- Ensure filename matches exactly! -->
-            <img src="scenetest.png" alt="The Hermit" class="hermit-img">
+        <!-- 2. HEADER -->
+        <header class="header-box box">
+            <div>
+                <h1>The Hermitage</h1>
+                <span style="font-size: 1rem;">A Digital Garden of Proof</span>
+            </div>
             
-            <div class="scroll-indicator">
-                \/ <br> Scroll to Explore
+            <!-- Standard Audio Toggle -->
+            <div>
+                <span>Music: </span>
+                <img id="speaker-icon" src="speakeroff.png" class="audio-btn" onclick="toggleChill()">
+            </div>
+        </header>
+
+        <!-- 3. INTRO TEXT -->
+        <div class="intro-box box">
+            <h2>Welcome, Traveler</h2>
+            <p>
+                You have arrived at my digital hermitage. 
+                I am not a corporate entity. I am a builder using AI to bridge the gap between imagination and execution.
+            </p>
+            <p>
+                This site itself is the pitch.
+            </p>
+        </div>
+
+        <!-- 4. THE BIG HERMIT SCENE (Seamless) -->
+        <div class="hermitage-scene box">
+            <!-- 
+                LAYER 1: The Static Scene (Hermit sitting) 
+                Make sure this image has a transparent background!
+            -->
+            <img src="scenetest.png" class="seamless-layer" alt="Hermitage Scene">
+
+            <!-- 
+                LAYER 2: The Animated Waterfall (Optional) 
+                If you make a GIF of just the water moving, put it here.
+            -->
+            <!-- <img src="waterfall.gif" class="waterfall-overlay" alt="Flowing Water"> -->
+
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 5px;">
+                Observing the pond...
             </div>
         </div>
 
-        <!-- SECTION 2: THE INTRODUCTION -->
-        <div class="text-block">
-            <h1>The Garden Hermit</h1>
-            <p>
-                You have stumbled upon a digital microcosm. 
-                Here, I cultivate ideas and pixelated structures.
-            </p>
-            <p>
-                I am not a coder. I am a builder using new tools to forge 
-                proof of concept.
-            </p>
-        </div>
-
-        <!-- SECTION 3: THE ARTIFACT (GAME) -->
-        <div class="text-block">
-            <h2>Current Project</h2>
-            <p>
-                A simulation of systems. A test of logic. 
-                Built in Godot 4.
-            </p>
+        <!-- 5. EMBEDDED GODOT GAME -->
+        <div class="game-box box">
+            <h2>Artifact: Test3</h2>
+            <p>Playable directly in this terminal.</p>
             
-            <div class="portal-frame">
-                <p style="color: #fff; margin:0;">[ PROTOTYPE TEST3 ]</p>
-                <br>
-                <a href="https://stefan8102.itch.io/test3" target="_blank" class="action-btn">
-                    ENTER PORTAL
-                </a>
+            <!-- Using the Itch Widget to avoid crashes, framed nicely -->
+            <div style="border: 2px dashed var(--accent); padding: 10px; text-align: center;">
+                <iframe frameborder="0" src="https://itch.io/embed/3196232?bg_color=2b2b2b&fg_color=dcdacb&link_color=74c99e&border_color=000000" width="100%" height="167"></iframe>
+                
+                <br><br>
+                <a href="https://stefan8102.itch.io/test3" target="_blank" class="btn">Full Screen</a>
             </div>
         </div>
 
-        <!-- SECTION 4: CONTACT -->
-        <div class="text-block" style="text-align: center;">
-            <h2>Send a Raven</h2>
+        <!-- 6. DEEP DIVE TEXT -->
+        <div class="deep-text box">
+            <h2>Why I am here</h2>
             <p>
-                The Hermit is listening.
+                Standard resumes are for standard minds. 
+                I offer a "Garden Hermit" approach: 
+                Deep focus, unique insights, and the ability to weave disparate tools (AI, Code, Art) into functional products.
             </p>
-            <a href="mailto:your@email.com" class="action-btn">
-                Email Me
-            </a>
-            <br><br>
-            <a href="https://github.com/yourusername" style="color: #fff;">
-                (Inspect Source)
-            </a>
         </div>
+
+        <!-- 7. COZY SCENERY (Bottom Left) -->
+        <div class="cozy-corner box">
+            <p>Detailed Scenery</p>
+            <!-- Add another small pixel art image here if you have one -->
+            <img src="grass.png" style="width: 100%; height: 50px; opacity: 0.5;">
+            <p style="font-size: 0.8rem;">The grass grows digitally.</p>
+        </div>
+
+        <!-- 8. FOOTER / DISCO SWITCH -->
+        <footer class="footer-box box">
+            <p>I am ready to build for you.</p>
+            
+            <div class="secret-switch" onclick="toggleDisco()">
+                [ DO NOT TOUCH ]
+            </div>
+        </footer>
 
     </div>
 
-    <!-- AUDIO SCRIPT -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        var audio = document.getElementById("bgm");
-        var icon = document.getElementById("speaker-icon");
+        var chillAudio = document.getElementById("bgm-chill");
+        var discoAudio = document.getElementById("bgm-disco");
+        var speakerIcon = document.getElementById("speaker-icon");
+        var isDisco = false;
         var isPlaying = false;
 
-        function toggleAudio() {
+        // Toggle Normal Music
+        function toggleChill() {
+            if (isDisco) return; // Don't mess with chill audio if disco is on
+
             if (isPlaying) {
-                audio.pause();
-                // Ensure filename matches exactly!
-                icon.src = "speakeroff.PNG"; 
+                chillAudio.pause();
+                speakerIcon.src = "speakeroff.png";
             } else {
-                audio.play();
-                // Ensure filename matches exactly!
-                icon.src = "speakeron.PNG";
-                audio.volume = 0.5;
+                chillAudio.play();
+                speakerIcon.src = "speakeron.png";
             }
             isPlaying = !isPlaying;
+        }
+
+        // Toggle SECRET DISCO MODE
+        function toggleDisco() {
+            isDisco = !isDisco;
+            var body = document.body;
+
+            if (isDisco) {
+                // TURN ON DISCO
+                body.classList.add("disco-mode");
+                chillAudio.pause();
+                discoAudio.play(); // Make sure you have disco.mp3 uploaded!
+                alert("PARTY MODE ACTIVATED");
+            } else {
+                // TURN OFF DISCO
+                body.classList.remove("disco-mode");
+                discoAudio.pause();
+                discoAudio.currentTime = 0;
+                if(isPlaying) chillAudio.play();
+            }
         }
     </script>
 
