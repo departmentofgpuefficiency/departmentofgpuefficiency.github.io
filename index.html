@@ -13,351 +13,347 @@
 
     <style>
         :root {
-            /* HERMIT MODE COLORS (Default) */
-            --bg-color: #1a1a1a;
-            --box-bg: #2b2b2b;
-            --text-color: #dcdacb;
-            --accent: #74c99e; /* Moss Green */
-            --border: 3px solid #000;
-            --shadow: 5px 5px 0px #000;
+            /* COLORS */
+            --text-color: #5D2C89; /* Deep Purple */
+            --text-outline: #ffffff; /* White outline helps purple pop on green */
+            --accent: #FF00FF; /* Hot Pink for links/buttons */
         }
 
-        /* DISCO MODE COLORS (Toggled via JS) */
+        /* DISCO MODE VARS */
         body.disco-mode {
-            --bg-color: #220022;
-            --box-bg: #440044;
-            --text-color: #00ff00;
-            --accent: #ff00ff; /* Neon Pink */
-            --border: 3px solid #00ff00;
-            --shadow: 5px 5px 0px #ff00ff;
-            animation: disco-flash 2s infinite;
+            --text-color: #00FF00; /* Neon Green */
+            --text-outline: #000000;
+            --accent: #FFFF00;
+            animation: disco-flash 1s infinite;
         }
 
         @keyframes disco-flash {
-            0% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(180deg); }
-            100% { filter: hue-rotate(360deg); }
+            0% { filter: hue-rotate(0deg) contrast(1.2); }
+            50% { filter: hue-rotate(180deg) contrast(2); }
+            100% { filter: hue-rotate(360deg) contrast(1.2); }
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            background-color: var(--bg-color);
+            /* DEEP PURPLE TEXT */
             color: var(--text-color);
+            /* White shadow makes the text readable on grass */
+            text-shadow: 2px 2px 0px var(--text-outline);
+            
             font-family: 'VT323', monospace;
-            font-size: 1.3rem;
+            font-size: 1.5rem; /* Slightly larger for readability without boxes */
             margin: 0;
             padding: 20px;
-            /* Retro background tile */
+            
+            /* BACKGROUND */
             background-image: url('grass.png');
             background-size: 64px 64px;
             image-rendering: pixelated;
-            cursor: url('Cursortest.png'), auto;
+            cursor: url('Cursortest.PNG'), auto;
         }
 
-        /* --- THE GRID LAYOUT --- */
+        /* --- THE LAYOUT (Invisible Grid) --- */
         .bento-grid {
             display: grid;
-            grid-template-columns: 200px 1fr 1fr; /* Sidebar | Left Content | Right Content */
-            gap: 20px;
+            grid-template-columns: 200px 1fr 1fr;
+            gap: 40px; /* Increased gap since there are no borders */
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* UNIVERSAL BOX STYLE */
+        /* INVISIBLE CONTAINER (Structure only, no visuals) */
         .box {
-            background: var(--box-bg);
-            border: var(--border);
-            box-shadow: var(--shadow);
-            padding: 20px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 10px;
             position: relative;
         }
 
-        /* HEADER (Spans all columns except sidebar) */
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            margin: 0; 
+            font-size: 3.5rem; 
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 3px dashed var(--text-color);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        p { margin-bottom: 1.5rem; font-weight: bold; }
+
+        /* LINKS & BUTTONS */
+        a {
+            color: var(--text-color);
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-decoration-thickness: 3px;
+        }
+        
+        a:hover {
+            color: var(--accent);
+            cursor: url('Cursortest.png'), pointer;
+        }
+
+        .btn {
+            background: var(--text-color);
+            color: #fff;
+            text-shadow: none;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            border: 2px solid #fff;
+        }
+        .btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* --- HEADER & SPEAKER --- */
         .header-box {
             grid-column: 2 / 4;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
 
-        h1 { margin: 0; font-size: 2.5rem; color: var(--accent); text-transform: uppercase; }
+        /* THE BREATHING SPEAKER */
+        .audio-wrapper {
+            position: fixed; /* Keeps it in view even when scrolling? Or absolute? */
+            /* Let's keep it in the header flow for now, but make it big */
+            z-index: 100;
+        }
 
-        /* SIDEBAR (Sticky!) */
+        .audio-btn {
+            width: 80px;  /* BIGGER */
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* Class for when sound is OFF (Breathe to say "Click me!") */
+        .breathing {
+            animation: breathe 2s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px #fff); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 10px #fff); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0px #fff); }
+        }
+
+        /* --- SECTIONS --- */
         .sidebar-col {
             grid-column: 1 / 2;
-            grid-row: 1 / 5; /* Spans down 4 rows */
-            height: 100%;
+            grid-row: 1 / 5;
         }
 
         .sticky-wrapper {
             position: sticky;
-            top: 20px; /* Sticks to top of screen when scrolling */
+            top: 40px;
         }
 
-        /* MAIN CONTENT AREAS */
-        .intro-box {
-            grid-column: 2 / 3;
-            min-height: 300px;
-        }
-
+        .intro-box { grid-column: 2 / 3; }
+        
         .hermitage-scene {
             grid-column: 3 / 4;
-            grid-row: 2 / 4; /* Spans 2 rows tall */
+            grid-row: 2 / 4;
             min-height: 500px;
             position: relative;
-            overflow: hidden;
             display: flex;
-            align-items: flex-end; /* Aligns hermit to bottom */
+            align-items: flex-end;
             justify-content: center;
         }
 
-        .game-box {
-            grid-column: 2 / 3;
-            min-height: 300px;
+        .seamless-img {
+            max-width: 100%;
+            /* Make it float slightly? */
+            /* animation: floaty 4s infinite ease-in-out; */ 
         }
 
-        .deep-text {
-            grid-column: 3 / 4;
-        }
+        .game-box { grid-column: 2 / 3; }
+        .deep-text { grid-column: 3 / 4; }
+        .footer-box { grid-column: 2 / 4; text-align: center; margin-top: 50px; }
 
-        .footer-box {
-            grid-column: 2 / 4;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .cozy-corner {
-            grid-column: 2 / 3;
-        }
-
-        /* --- GRAPHICS & LAYERING --- */
-        .seamless-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures it fills the box */
-            pointer-events: none; /* Lets you click through it */
-        }
-
-        /* Waterfall Animation (If you have a GIF) */
-        .waterfall-overlay {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 100px;
-            opacity: 0.8;
-            mix-blend-mode: overlay; /* Helps blend pixel art */
-        }
-
-        /* BUTTONS */
-        .btn {
-            display: inline-block;
-            background: var(--accent);
-            color: #000;
-            padding: 5px 10px;
-            text-decoration: none;
-            border: 2px solid #000;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .btn:hover { background: #fff; }
-
-        /* AUDIO TOGGLES */
-        .audio-btn {
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            vertical-align: middle;
-        }
-
-        /* HIDDEN DISCO SWITCH */
+        /* SECRET DISCO SWITCH */
         .secret-switch {
-            font-size: 0.8rem;
-            opacity: 0.3;
+            font-size: 1rem;
+            opacity: 0.5;
             cursor: help;
-            border: 1px dashed var(--accent);
-            padding: 5px;
+            border: 2px dotted var(--text-color);
+            padding: 10px;
             display: inline-block;
-            margin-top: 20px;
+            background: rgba(255,255,255,0.2);
         }
-        .secret-switch:hover { opacity: 1; }
 
-        /* --- MOBILE LAYOUT --- */
+        /* --- MOBILE --- */
         @media (max-width: 800px) {
-            .bento-grid {
-                display: flex;
-                flex-direction: column;
-            }
-            .sidebar-col { order: 99; } /* Moves contact to bottom on mobile */
-            .header-box { order: 1; }
-            .intro-box { order: 2; }
-            .hermitage-scene { order: 3; min-height: 300px; }
-            .game-box { order: 4; }
+            .bento-grid { display: flex; flex-direction: column; }
+            h1 { font-size: 2.5rem; }
+            .sidebar-col { order: 99; }
         }
     </style>
 </head>
 <body>
 
-    <!-- AUDIO PLAYERS -->
+    <!-- AUDIO FILES -->
     <audio id="bgm-chill" loop>
         <source src="ambience.mp3" type="audio/mpeg">
     </audio>
-    <!-- You need a second file for disco mode, e.g. disco.mp3 -->
     <audio id="bgm-disco" loop>
+        <!-- Ensure you upload disco.mp3 or this won't play! -->
         <source src="disco.mp3" type="audio/mpeg">
     </audio>
 
     <div class="bento-grid">
 
-        <!-- 1. LEFT SIDEBAR (Sticky Contact) -->
+        <!-- LEFT SIDEBAR -->
         <aside class="sidebar-col">
             <div class="sticky-wrapper box">
-                <p>CONTACT THE HERMIT</p>
-                <hr style="border-color: var(--accent);">
-                <p style="font-size: 1rem;">
-                    Status: <span style="color:var(--accent)">Online</span><br>
-                    Mood: Contemplative
-                </p>
-                <a href="mailto:your@email.com" class="btn" style="width: 100%; box-sizing: border-box; text-align: center;">EMAIL ME</a>
-                <br><br>
-                <p style="font-size: 0.9rem; opacity: 0.7;">
-                    (This panel slides with you as you explore.)
-                </p>
+                <p style="font-size: 1.2rem;">THE HERMIT IS IN.</p>
+                <div style="height: 4px; background: var(--text-color); width: 50px; margin-bottom: 20px;"></div>
+                
+                <a href="mailto:your@email.com" class="btn">EMAIL ME</a>
             </div>
         </aside>
 
-        <!-- 2. HEADER -->
+        <!-- HEADER -->
         <header class="header-box box">
             <div>
                 <h1>The Hermitage</h1>
-                <span style="font-size: 1rem;">A Digital Garden of Proof</span>
+                <p style="margin-top:0; font-size: 1.2rem; opacity: 0.8;">A Digital Garden</p>
             </div>
             
-            <!-- Standard Audio Toggle -->
-            <div>
-                <span>Music: </span>
-                <img id="speaker-icon" src="speakeroff.PNG" class="audio-btn" onclick="toggleChill()">
+            <!-- SPEAKER ICON (Big & Breathing) -->
+            <div class="audio-wrapper">
+                <!-- NOTE: Using .PNG (Capitalized) as requested -->
+                <img id="speaker-icon" src="speakeroff.PNG" class="audio-btn breathing" onclick="toggleChill()">
+                <div style="font-size: 0.8rem; text-align: center; margin-top: 5px;">SOUND</div>
             </div>
         </header>
 
-        <!-- 3. INTRO TEXT -->
+        <!-- INTRO -->
         <div class="intro-box box">
-            <h2>Welcome, Traveler</h2>
+            <h2>Welcome</h2>
             <p>
-                You have arrived at my digital hermitage. 
-                I am not a corporate entity. I am a builder using AI to bridge the gap between imagination and execution.
+                No boxes. No corporate walls. <br>
+                Just text on grass.
             </p>
             <p>
-                This site itself is the pitch.
+                I am building a proof of concept. 
+                I am not a coder, but I have built this world 
+                to show what is possible with a different mind.
             </p>
         </div>
 
-        <!-- 4. THE BIG HERMIT SCENE (Seamless) -->
+        <!-- THE SCENE -->
         <div class="hermitage-scene box">
-            <!-- 
-                LAYER 1: The Static Scene (Hermit sitting) 
-                Make sure this image has a transparent background!
-            -->
-            <img src="scenetest.png" class="seamless-layer" alt="Hermitage Scene">
-
-            <!-- 
-                LAYER 2: The Animated Waterfall (Optional) 
-                If you make a GIF of just the water moving, put it here.
-            -->
-            <!-- <img src="waterfall.gif" class="waterfall-overlay" alt="Flowing Water"> -->
-
-            <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 5px;">
-                Observing the pond...
-            </div>
+            <img src="scenetest.png" class="seamless-img" alt="The Hermit">
+            <!-- Optional Waterfall GIF -->
+            <!-- <img src="waterfall.gif" style="position:absolute; bottom:0; right:0;" > -->
         </div>
 
-        <!-- 5. EMBEDDED GODOT GAME -->
+        <!-- THE GAME -->
         <div class="game-box box">
-            <h2>Artifact: Test3</h2>
-            <p>Playable directly in this terminal.</p>
+            <h2>The Artifact</h2>
+            <p>Interactive Simulation (Godot 4)</p>
             
-            <!-- Using the Itch Widget to avoid crashes, framed nicely -->
-            <div style="border: 2px dashed var(--accent); padding: 10px; text-align: center;">
-                <iframe frameborder="0" src="https://itch.io/embed/3196232?bg_color=2b2b2b&fg_color=dcdacb&link_color=74c99e&border_color=000000" width="100%" height="167"></iframe>
-                
-                <br><br>
-                <a href="https://stefan8102.itch.io/test3" target="_blank" class="btn">Full Screen</a>
+            <!-- Simple border just to frame the game content -->
+            <div style="border: 4px solid var(--text-color); background: #000;">
+                <iframe frameborder="0" src="https://itch.io/embed/3196232?bg_color=000000&fg_color=ffffff&link_color=8A2BE2&border_color=000000" width="100%" height="167"></iframe>
             </div>
+            
+            <a href="https://stefan8102.itch.io/test3" target="_blank" class="btn">FULLSCREEN</a>
         </div>
 
-        <!-- 6. DEEP DIVE TEXT -->
+        <!-- DEEP DIVE -->
         <div class="deep-text box">
-            <h2>Why I am here</h2>
+            <h2>Philosophy</h2>
             <p>
-                Standard resumes are for standard minds. 
-                I offer a "Garden Hermit" approach: 
-                Deep focus, unique insights, and the ability to weave disparate tools (AI, Code, Art) into functional products.
+                Why hire a standard developer when you can consult the Hermit?
+            </p>
+            <p>
+                I offer calm structure in a chaotic digital age.
+                Scroll down to find the secret switch.
             </p>
         </div>
 
-        <!-- 7. COZY SCENERY (Bottom Left) -->
-        <div class="cozy-corner box">
-            <p>Detailed Scenery</p>
-            <!-- Add another small pixel art image here if you have one -->
-            <img src="grass.png" style="width: 100%; height: 50px; opacity: 0.5;">
-            <p style="font-size: 0.8rem;">The grass grows digitally.</p>
-        </div>
-
-        <!-- 8. FOOTER / DISCO SWITCH -->
+        <!-- FOOTER / DISCO -->
         <footer class="footer-box box">
-            <p>I am ready to build for you.</p>
+            <p>© 2025 The Garden Hermit</p>
             
             <div class="secret-switch" onclick="toggleDisco()">
-                [ DO NOT TOUCH ]
+                CLICK FOR DISCO MODE
             </div>
         </footer>
 
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- SCRIPT -->
     <script>
         var chillAudio = document.getElementById("bgm-chill");
         var discoAudio = document.getElementById("bgm-disco");
         var speakerIcon = document.getElementById("speaker-icon");
+        
         var isDisco = false;
-        var isPlaying = false;
+        var isPlaying = false; // "Is the chill music currently active?"
 
-        // Toggle Normal Music
         function toggleChill() {
-            if (isDisco) return; // Don't mess with chill audio if disco is on
+            // If Disco is on, clicking the speaker just turns off disco and resets
+            if (isDisco) {
+                toggleDisco(); 
+                return;
+            }
 
             if (isPlaying) {
                 chillAudio.pause();
-                speakerIcon.src = "speakeroff.PNG";
+                speakerIcon.src = "speakeroff.PNG"; // Capital PNG
+                speakerIcon.classList.add("breathing"); // Start breathing again
             } else {
                 chillAudio.play();
-                speakerIcon.src = "speakeron.PNG";
+                speakerIcon.src = "speakeron.PNG"; // Capital PNG
+                speakerIcon.classList.remove("breathing"); // Stop breathing
             }
             isPlaying = !isPlaying;
         }
 
-        // Toggle SECRET DISCO MODE
         function toggleDisco() {
             isDisco = !isDisco;
             var body = document.body;
 
             if (isDisco) {
-                // TURN ON DISCO
+                // DISCO ON
                 body.classList.add("disco-mode");
+                
+                // Mute Chill
                 chillAudio.pause();
-                discoAudio.play(); // Make sure you have disco.mp3 uploaded!
-                alert("PARTY MODE ACTIVATED");
-            } else {
-                // TURN OFF DISCO
-                body.classList.remove("disco-mode");
-                discoAudio.pause();
+                
+                // Start Disco
                 discoAudio.currentTime = 0;
-                if(isPlaying) chillAudio.play();
+                discoAudio.play();
+                
+                alert("Let's dance.");
+            } else {
+                // DISCO OFF
+                body.classList.remove("disco-mode");
+                
+                // Stop Disco
+                discoAudio.pause();
+                
+                // Resume Chill ONLY if it was playing before
+                if (isPlaying) {
+                    chillAudio.play();
+                }
             }
         }
     </script>
 
 </body>
 </html>
-
